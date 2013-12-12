@@ -329,10 +329,20 @@ I18n.strftime = function(date, format) {
   };
 
   var f = format;
-  f = f.replace("%a", options.abbr_day_names[weekDay]);
-  f = f.replace("%A", options.day_names[weekDay]);
-  f = f.replace("%b", options.abbr_month_names[month]);
-  f = f.replace("%B", options.month_names[month]);
+	if(I18n.currentLocale()=='ru')
+	{
+		f = f.replace("%a", (/^%a/).test(f) ? options.common_abbr_day_names[weekDay] : options.standalone_abbr_day_names[weekDay]);
+		f = f.replace("%A", (/^%A/).test(f) ? options.common_day_names[weekDay] : options.standalone_day_names[weekDay]);
+		f = f.replace("%b", (/(%d|%e)(.*)(%b)/).test(f) ? options.common_abbr_month_names[month] : options.standalone_abbr_month_names[month]);
+		f = f.replace("%B", (/(%d|%e)(.*)(%B)/).test(f) ? options.common_month_names[month] : options.standalone_month_names[month]);
+	}
+	else
+	{
+		f = f.replace("%a", options.abbr_day_names[weekDay]);
+		f = f.replace("%A", options.day_names[weekDay]);
+		f = f.replace("%b", options.abbr_month_names[month]);
+		f = f.replace("%B", options.month_names[month]);
+	}
   f = f.replace("%d", padding(day));
   f = f.replace("%e", day);
   f = f.replace("%-d", day);
